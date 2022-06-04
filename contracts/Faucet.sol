@@ -14,7 +14,7 @@ contract FaucetBase {
     _;
   }
   
-  function destroy() public onlyOwner {
+  function destroy() external onlyOwner {
     selfdestruct(owner);
   }
 }
@@ -24,12 +24,12 @@ contract Faucet is FaucetBase {
   event Withdrawal(address indexed to, uint amount);
   event Deposit(address indexed from, uint amount);
   
-  function widthdraw(uint widthdraw_amount) public onlyOwner {
-    require(address(this).balance >= widthdraw_amount);
+  function widthdraw(uint withdrawAmount) external onlyOwner {
+    require(address(this).balance >= withdrawAmount);
 
-    payable(msg.sender).transfer(widthdraw_amount);
+    emit Withdrawal(msg.sender, withdrawAmount);
 
-    emit Withdrawal(msg.sender, widthdraw_amount);
+    payable(msg.sender).transfer(withdrawAmount);
   }
   
    receive() external payable {
